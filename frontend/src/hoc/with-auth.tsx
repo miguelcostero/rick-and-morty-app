@@ -4,8 +4,8 @@ import { Redirect } from '@reach/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { ApiClient } from '../api.client';
-import Spinner from '../components/Spinner';
 import { authActions } from '../store/slices/auth.slice';
+import SplashScreen from '../components/SplashScreen';
 
 const apiClient = ApiClient.getInstance();
 
@@ -24,7 +24,7 @@ const withAuth = (WrappedComponent: FC) => {
         }, [token, user]);
 
         if (state.loading) {
-            return <Spinner />;
+            return <SplashScreen />;
         }
 
         if (!token || (state.error && !state.loading)) {
