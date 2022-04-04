@@ -4,7 +4,7 @@ import { User } from '../models/user.model';
 
 const userController = Router();
 
-userController.get('/', (_, res) => {
+userController.get('/me', (_, res) => {
     return res.send((res.locals.user as DocumentType<User>).publicMask());
 });
 
