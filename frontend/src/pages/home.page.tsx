@@ -1,5 +1,6 @@
-import { RouteComponentProps } from '@reach/router';
 import { FC } from 'react';
+import { RouteComponentProps } from '@reach/router';
+import withAuth from '../hoc/with-auth';
 
 const HomePage: FC<RouteComponentProps> = () => {
     return (
@@ -16,4 +17,4 @@ const HomePage: FC<RouteComponentProps> = () => {
     );
 };
 
-export default HomePage;
+export default withAuth(HomePage);

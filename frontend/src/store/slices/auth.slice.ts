@@ -10,6 +10,7 @@ const initialState: AuthState = {
     token: localStorage.getItem('token') || undefined,
 };
 
+// slice
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -24,6 +25,8 @@ export const authSlice = createSlice({
     },
 });
 
+// actions
 export const authActions = authSlice.actions;
 
+// reducer
 export const authReducer = authSlice.reducer;
