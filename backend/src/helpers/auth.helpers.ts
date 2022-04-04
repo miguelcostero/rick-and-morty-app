@@ -1,6 +1,5 @@
 import jsonwebtoken from 'jsonwebtoken';
 import { randomBytes, pbkdf2Sync } from 'crypto';
-import environment from '../environment';
 
 export const generateSalt = (): string => {
     return randomBytes(16).toString('hex');
@@ -11,7 +10,7 @@ export const hashPassword = (salt: string, password: string): string => {
 };
 
 export const generateToken = (userId: string): string => {
-    return jsonwebtoken.sign({ userId }, environment.jwtSecret, {
+    return jsonwebtoken.sign({ userId }, process.env.JWT_SECRET as string, {
         expiresIn: '1d',
     });
 };

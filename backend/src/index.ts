@@ -1,12 +1,12 @@
 import express from 'express';
 import dotenvSafe from 'dotenv-safe';
-import environment from './environment';
 import { connectToDatabase } from './database';
 
 // middlewares
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
+import bodyParser from 'body-parser';
 import logger, { httpLogger } from './logger';
 import { authMiddleware } from './middlewares/auth.middleware';
 
@@ -17,13 +17,16 @@ import authController from './controllers/auth.controller';
 
 dotenvSafe.config();
 
+const PORT = process.env.PORT || 4000;
+
 const startServer = async () => {
     const app = express();
 
-    app.use(cors());
-    app.use(compression());
     app.use(httpLogger);
     app.use(helmet());
+    app.use(cors());
+    app.use(compression());
+    app.use(bodyParser.json());
 
     app.get('/', (_, res) => res.send({ status: 'Ok!' }));
     app.use('/auth', authController);
@@ -32,8 +35,8 @@ const startServer = async () => {
 
     await connectToDatabase();
 
-    app.listen(environment.port, () => {
-        logger.info(`Server started on port ${environment.port}`);
+    app.listen(PORT, () => {
+        logger.info(`Server started on port ${PORT}`);
     });
 };
 

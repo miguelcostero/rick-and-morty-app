@@ -1,8 +1,7 @@
 import { Types } from 'mongoose';
 import jsonwebtoken from 'jsonwebtoken';
 import type { Middleware } from '../types';
-import environment from '../environment';
-import { createUserModel } from '../models/user.model';
+import { UserModel } from '../models/user.model';
 
 export const authMiddleware: Middleware = async (req, res, next) => {
     const token = req.header('authorization')?.replace('Bearer ', '');
@@ -15,7 +14,7 @@ export const authMiddleware: Middleware = async (req, res, next) => {
     try {
         const decoded = jsonwebtoken.verify(
             token,
-            environment.jwtSecret,
+            process.env.JWT_SECRET as string,
         ) as jsonwebtoken.JwtPayload;
 
         if (!Types.ObjectId.isValid(decoded.userId)) {
@@ -23,7 +22,7 @@ export const authMiddleware: Middleware = async (req, res, next) => {
             return;
         }
 
-        const user = await createUserModel().findOne({ _id: decoded.userId });
+        const user = await UserModel.findOne({ _id: decoded.userId });
         if (!user) {
             res.status(401).json({ message: 'User not found' });
             return;

@@ -1,10 +1,9 @@
 import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { IModelOptions, DocumentType } from '@typegoose/typegoose/lib/types';
-import { Connection } from 'mongoose';
+import { DocumentType } from '@typegoose/typegoose/lib/types';
 import { hashPassword } from '../helpers/auth.helpers';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
-export class UserModel {
+export class User {
     @prop({ required: true, lowercase: true })
     email!: string;
 
@@ -20,7 +19,7 @@ export class UserModel {
     @prop({ required: true })
     lastName!: string;
 
-    public publicMask(this: DocumentType<UserModel>) {
+    public publicMask(this: DocumentType<User>) {
         return {
             _id: String(this._id),
             firstName: this.firstName,
@@ -30,18 +29,10 @@ export class UserModel {
         };
     }
 
-    public validatePassword(this: DocumentType<UserModel>, password: string) {
+    public validatePassword(this: DocumentType<User>, password: string) {
         const hashedPassword = hashPassword(this.salt, password);
         return this.password === hashedPassword;
     }
 }
 
-export const createUserModel = (connection?: Connection) => {
-    const options: IModelOptions = {};
-
-    if (connection) {
-        options.existingConnection = connection;
-    }
-
-    return getModelForClass(UserModel, options);
-};
+export const UserModel = getModelForClass(User);
