@@ -101,7 +101,7 @@ const CharacterDetailPage: FC<Props> = ({ id }) => {
         <PageContainer>
             <LinkButton
                 type="button"
-                onClick={() => navigate(-1).then()}
+                onClick={() => navigate('/home').then()}
                 style={{ marginBottom: '1rem' }}
             >
                 {'<'} Go back
