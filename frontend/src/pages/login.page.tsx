@@ -1,5 +1,6 @@
 import * as yup from 'yup';
-import { FC } from 'react';
+import axios from 'axios';
+import { FC, useState } from 'react';
 import { RouteComponentProps, useNavigate } from '@reach/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +14,8 @@ import ErrorMessage from '../components/ErrorMessage';
 import { ApiClient } from '../api.client';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../store/slices/auth.slice';
+import LinkButton from '../components/LinkButton';
+import Alert from '../components/Alert';
 
 const apiClient = ApiClient.getInstance();
 
@@ -27,6 +30,8 @@ export const LoginPage: FC<RouteComponentProps> = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [error, setError] = useState<string | null>(null);
+
     const {
         handleSubmit,
         register,
@@ -38,13 +43,19 @@ export const LoginPage: FC<RouteComponentProps> = () => {
         resolver: yupResolver(schema),
     });
 
+    console.log(error);
+
     return (
         <Container>
             <Box>
                 <h1>Login</h1>
 
+                {error && <Alert type="danger">{error}</Alert>}
+
                 <form
                     onSubmit={handleSubmit(async (val) => {
+                        setError(null);
+
                         try {
                             const { token, user } = await apiClient.login(
                                 val.email,
@@ -54,8 +65,16 @@ export const LoginPage: FC<RouteComponentProps> = () => {
                             dispatch(authActions.setUser(user));
 
                             await navigate('/');
-                        } catch (err) {
-                            console.log(err);
+                        } catch (err: any) {
+                            if (axios.isAxiosError(err)) {
+                                if (err.response) {
+                                    setError(err.response.data.error);
+                                } else {
+                                    setError('Something went wrong');
+                                }
+                            } else {
+                                setError('An unknown error occurred.');
+                            }
                         }
                     })}
                 >
@@ -91,9 +110,21 @@ export const LoginPage: FC<RouteComponentProps> = () => {
                         </FormControl>
                     </FormGroup>
 
-                    <Button type="submit" disabled={!isDirty || isSubmitting}>
-                        {isSubmitting ? 'Loading...' : 'Login'}
-                    </Button>
+                    <FormGroup columns={2}>
+                        <Button
+                            type="submit"
+                            disabled={!isDirty || isSubmitting}
+                        >
+                            {isSubmitting ? 'Loading...' : 'Login'}
+                        </Button>
+
+                        <LinkButton
+                            type="button"
+                            onClick={() => navigate('/signup').then()}
+                        >
+                            Sign Up
+                        </LinkButton>
+                    </FormGroup>
                 </form>
             </Box>
         </Container>

@@ -22,6 +22,11 @@ export const authSlice = createSlice({
         setUser(state, action: PayloadAction<UserModel>) {
             state.user = action.payload;
         },
+        logout(state) {
+            state.token = undefined;
+            state.user = undefined;
+            localStorage.removeItem('token');
+        },
     },
 });
 

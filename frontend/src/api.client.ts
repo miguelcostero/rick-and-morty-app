@@ -39,8 +39,7 @@ export class ApiClient {
             email,
             password,
         });
-        const r_1 = r.data;
-        return { ...r_1, user: new UserModel(r_1.user) };
+        return r.data;
     }
 
     public async signup(
@@ -53,13 +52,12 @@ export class ApiClient {
             token: string;
             user: UserModel;
         }>('/auth/signup', data);
-        const d = r.data;
-        return { ...d, user: new UserModel(d.user) };
+        return r.data;
     }
 
     public async getUser() {
         const r = await this.httpClient.get<UserModel>('/user/me');
-        return new UserModel(r.data);
+        return r.data;
     }
 
     public async getCharacters(pageNumber = 1) {
