@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserModel } from './models';
+import { Character, UserModel } from './models';
 import { store } from './store';
 
 export class ApiClient {
@@ -60,5 +60,22 @@ export class ApiClient {
     public async getUser() {
         const r = await this.httpClient.get<UserModel>('/user/me');
         return new UserModel(r.data);
+    }
+
+    public async getCharacters(pageNumber = 1) {
+        const r = await this.httpClient.get<{
+            pageNumber: number;
+            total: number;
+            data: Character[];
+        }>('/character', {
+            params: { pageNumber },
+        });
+        return {
+            hasMore: r.data.total > pageNumber * 20,
+            data: r.data.data.map((c) => ({
+                ...c,
+                created: new Date(c.created),
+            })),
+        };
     }
 }

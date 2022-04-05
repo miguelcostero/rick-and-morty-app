@@ -7,7 +7,8 @@ const Container = styled.div`
     width: 100%;
     max-width: 100%;
     height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 `;
 
 export default Container;

@@ -9,8 +9,8 @@ import SplashScreen from '../components/SplashScreen';
 
 const apiClient = ApiClient.getInstance();
 
-const withAuth = (WrappedComponent: FC) => {
-    const WithAuth: FC = (props) => {
+function withAuth<P>(WrappedComponent: FC<P>) {
+    const WithAuth: FC<P> = (props) => {
         const dispatch = useDispatch();
 
         const token = useSelector((state: RootState) => state.auth.token);
@@ -35,6 +35,6 @@ const withAuth = (WrappedComponent: FC) => {
     };
 
     return WithAuth;
-};
+}
 
 export default withAuth;
