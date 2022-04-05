@@ -8,4 +8,15 @@ export type Character = {
     locationName: string;
     origin: string;
     created: Date;
+    isFav: boolean;
+    favSince?: Date;
+};
+
+export type CharacterDetail = Character & {
+    episodes: {
+        id: number;
+        name: string;
+        code: string;
+        airDate: string;
+    }[];
 };

@@ -1,33 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { RouteComponentProps, useNavigate } from '@reach/router';
-import styled from 'styled-components';
 import { ApiClient } from '../api.client';
 import withAuth from '../hoc/with-auth';
 import Spinner from '../components/Spinner';
 import Grid from '../components/Grid';
 import CharacterBox from '../components/CharacterBox';
 import { Character } from '../models';
-import Button from '../components/Button';
-import UserProfileBar from '../components/UserProfileBar';
+import PageContainer from '../components/PageContainer';
+import LoadMoreButton from '../components/LoadMoreButton';
 
 const apiClient = ApiClient.getInstance();
-
-const Container = styled.div`
-    width: 80%;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 2rem;
-    overflow-x: hidden;
-`;
-
-const LoadMoreButton = styled(Button)`
-    display: block;
-    margin-top: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
-`;
 
 const HomePage: FC<RouteComponentProps> = () => {
     const navigate = useNavigate();
@@ -55,9 +37,7 @@ const HomePage: FC<RouteComponentProps> = () => {
     }, [pageNumber]);
 
     return (
-        <Container>
-            <UserProfileBar title="Rick & Morty App" />
-
+        <PageContainer>
             <Grid columns={2}>
                 {items.map((c) => (
                     <CharacterBox
@@ -78,7 +58,7 @@ const HomePage: FC<RouteComponentProps> = () => {
                     Load More
                 </LoadMoreButton>
             )}
-        </Container>
+        </PageContainer>
     );
 };
 

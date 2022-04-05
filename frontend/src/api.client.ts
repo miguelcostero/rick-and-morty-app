@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Character, UserModel } from './models';
+import { Character, CharacterDetail, UserModel } from './models';
 import { store } from './store';
 
 export class ApiClient {
@@ -31,7 +31,13 @@ export class ApiClient {
         return ApiClient.instance;
     }
 
-    public async login(email: string, password: string) {
+    public async login(
+        email: string,
+        password: string,
+    ): Promise<{
+        token: string;
+        user: UserModel;
+    }> {
         const r = await this.httpClient.post<{
             token: string;
             user: UserModel;
@@ -47,7 +53,10 @@ export class ApiClient {
             password: string;
             repeatPassword: string;
         },
-    ) {
+    ): Promise<{
+        token: string;
+        user: UserModel;
+    }> {
         const r = await this.httpClient.post<{
             token: string;
             user: UserModel;
@@ -55,12 +64,14 @@ export class ApiClient {
         return r.data;
     }
 
-    public async getUser() {
+    public async getUser(): Promise<UserModel> {
         const r = await this.httpClient.get<UserModel>('/user/me');
         return r.data;
     }
 
-    public async getCharacters(pageNumber = 1) {
+    public async getCharacters(
+        pageNumber = 1,
+    ): Promise<{ hasMore: boolean; data: Character[] }> {
         const r = await this.httpClient.get<{
             pageNumber: number;
             total: number;
@@ -73,7 +84,27 @@ export class ApiClient {
             data: r.data.data.map((c) => ({
                 ...c,
                 created: new Date(c.created),
+                favSince: c.favSince ? new Date(c.favSince) : undefined,
             })),
         };
+    }
+
+    public async getCharacter(id: number): Promise<CharacterDetail> {
+        const r = await this.httpClient.get<CharacterDetail>(
+            `/character/${id}`,
+        );
+        return {
+            ...r.data,
+            created: new Date(r.data.created),
+            favSince: r.data.favSince ? new Date(r.data.favSince) : undefined,
+        };
+    }
+
+    public async addFavCharacter(id: number): Promise<void> {
+        await this.httpClient.post(`/character/${id}/fav`);
+    }
+
+    public async removeFavCharacter(id: number): Promise<void> {
+        await this.httpClient.delete(`/character/${id}/fav`);
     }
 }

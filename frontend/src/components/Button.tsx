@@ -9,6 +9,7 @@ const Button = styled.button`
     background: #ffffff;
     font-size: 16px;
     outline: none;
+    cursor: pointer;
 
     &:disabled {
         opacity: 0.5;

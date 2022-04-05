@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 import { Character } from '../models';
+import DetailTitle from './DetailTitle';
+import StarIcon from './StarIcon';
 import StatusDot from './StatusDot';
 
 type Props = {
@@ -27,6 +29,8 @@ const Container = styled.div`
     .info {
         margin: 1rem;
         width: 100%;
+        overflow: hidden;
+        position: relative;
 
         h3 {
             margin-top: 0;
@@ -41,12 +45,12 @@ const Container = styled.div`
     &:hover {
         background-color: #3e3e4a;
     }
-`;
 
-const DetailTitle = styled.p`
-    color: #969696;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+    .fav {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 `;
 
 const CharacterBox: FC<Props> = ({
@@ -70,6 +74,10 @@ const CharacterBox: FC<Props> = ({
 
                 <DetailTitle>Origin</DetailTitle>
                 <p>{character.origin}</p>
+
+                <div className="fav">
+                    <StarIcon enabled={character.isFav} />
+                </div>
             </div>
         </Container>
     );
