@@ -50,6 +50,7 @@ ref: `backend/src/load-test-data.ts`
 
 ## frontend
 
+#### libraries
 - react -> ui lib for creating components.
 - styled-components -> used to work with css in javascript.
 - yup -> form schema validation
