@@ -37,7 +37,7 @@ cp .env.example .env
 yarn dev
 ```
 
-**NOTE:** this app runs _mongodb-in-memory-server_, so every time app restarts all saved changes will be lost.
+**NOTE:** this app runs _mongodb-in-memory-server_, so every time backend restarts all saved changes will be lost.
 
 **Default user:**
 email: `miguel@test.com`
