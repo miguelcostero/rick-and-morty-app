@@ -7,7 +7,7 @@ export const authMiddleware: Middleware = async (req, res, next) => {
     const token = req.header('authorization')?.replace('Bearer ', '');
 
     if (!token) {
-        res.status(401).json({ message: 'Unauthorized' });
+        res.status(401).json({ error: 'Unauthorized' });
         return;
     }
 
@@ -18,27 +18,27 @@ export const authMiddleware: Middleware = async (req, res, next) => {
         ) as jsonwebtoken.JwtPayload;
 
         if (!Types.ObjectId.isValid(decoded.userId)) {
-            res.status(400).json({ message: 'Not valid id' });
+            res.status(400).json({ error: 'Not valid id' });
             return;
         }
 
         const user = await UserModel.findOne({ _id: decoded.userId });
         if (!user) {
-            res.status(401).json({ message: 'User not found' });
+            res.status(401).json({ error: 'User not found' });
             return;
         }
 
         res.locals.user = user;
     } catch (err) {
         if (err instanceof jsonwebtoken.TokenExpiredError) {
-            res.status(401).json({ message: 'Token expired' });
+            res.status(401).json({ error: 'Token expired' });
             return;
         } else if (err instanceof jsonwebtoken.JsonWebTokenError) {
-            res.status(401).json({ message: 'Invalid token' });
+            res.status(401).json({ error: 'Invalid token' });
             return;
         }
 
-        res.status(401).json({ message: 'Unauthorized' });
+        res.status(401).json({ error: 'Unauthorized' });
         return;
     }
 
