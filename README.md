@@ -78,3 +78,9 @@ cp .env.example .env
 ```bash
 yarn dev
 ```
+
+
+-----
+
+Miguel Costero
+miguel3490@gmail.com
