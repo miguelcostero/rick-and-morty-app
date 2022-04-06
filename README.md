@@ -15,6 +15,7 @@
 - cors -> used to enable cors
 - jsonwebtoken -> used to generate and validate jwt tokens
 - compression -> middleware to compress api responses
+- rickmortyapi -> rick and morty api wrapper for nodejs
 
 ### how to run
 
