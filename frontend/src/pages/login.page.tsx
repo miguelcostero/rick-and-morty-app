@@ -43,8 +43,6 @@ export const LoginPage: FC<RouteComponentProps> = () => {
         resolver: yupResolver(schema),
     });
 
-    console.log(error);
-
     return (
         <Container>
             <Box>
